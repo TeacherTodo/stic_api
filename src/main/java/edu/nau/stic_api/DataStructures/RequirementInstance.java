@@ -64,6 +64,42 @@ public class RequirementInstance
         this.retake_date = retake_date;
     }
 
+    public RequirementInstance(int requirement_id, String student_uid, String status)
+    {
+        this.requirement_id = requirement_id;
+        this.student_uid = student_uid;
+        this.status = status;
+        this.doc_guid = null;
+        this.retake_date = null;
+    }
+
+    public RequirementInstance(int requirement_id, String student_uid, String status, String doc_guid)
+    {
+        this.requirement_id = requirement_id;
+        this.student_uid = student_uid;
+        this.status = status;
+        this.doc_guid = doc_guid;
+        this.retake_date = null;
+    }
+
+    public RequirementInstance(int requirement_id, String student_uid, String status, Date retake_date)
+    {
+        this.requirement_id = requirement_id;
+        this.student_uid = student_uid;
+        this.status = status;
+        this.doc_guid = null;
+        this.retake_date = retake_date;
+    }
+
+    public RequirementInstance(int requirement_id, String student_uid, String status, String doc_guid, Date retake_date)
+    {
+        this.requirement_id = requirement_id;
+        this.student_uid = student_uid;
+        this.status = status;
+        this.doc_guid = doc_guid;
+        this.retake_date = retake_date;
+    }
+
     public int getID()
     {
         return this.id;

@@ -3,19 +3,14 @@ package edu.nau.stic_api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import edu.nau.stic_api.DataRepos.DocumentRepository;
-import edu.nau.stic_api.DataRepos.RequirementInstanceRepository;
-import edu.nau.stic_api.DataRepos.StudentRepository;
-import edu.nau.stic_api.DataStructures.Document;
-import edu.nau.stic_api.DataStructures.RequirementInstance;
-import edu.nau.stic_api.DataStructures.Student;
+import edu.nau.stic_api.DataRepos.*;
+import edu.nau.stic_api.DataStructures.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api", produces = "application/json")
@@ -29,6 +24,26 @@ public class ApiController
 
     @Autowired
     private DocumentRepository doc_repo;
+
+    @Autowired
+    private AdminUserRepository admin_repo;
+
+    @Autowired
+    private MajorRepository major_repo;
+
+    @Autowired
+    private TermRepository term_repo;
+
+    @Autowired
+    private RequirementStatusRepository request_status_repo;
+
+    @Autowired
+    private ApprovalStatusRepository approval_status_repo;
+
+    @Autowired
+    private RequirementRepository requirement_repo;
+
+    /* Database Access Methods: GET */
 
     @RequestMapping(path = "/student/{uid}", method = RequestMethod.GET)
     public String getStudent(@PathVariable String uid) throws JsonProcessingException
@@ -75,7 +90,23 @@ public class ApiController
         return mapper.writeValueAsString(students.toArray());
     }
 
-    @RequestMapping(path = "/requirement-instance/{id}/{uid}")
+    @RequestMapping(path = "/admins", method = RequestMethod.GET)
+    public String getAllAdmins() throws JsonProcessingException
+    {
+        Iterable<AdminUser> adminUserIterable = admin_repo.findAll();
+        List<AdminUser> admins = new ArrayList<AdminUser>();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+
+        for(AdminUser admin : adminUserIterable)
+        {
+            admins.add(admin);
+        }
+
+        return mapper.writeValueAsString(admins);
+    }
+
+    @RequestMapping(path = "/requirement-instance/{id}/{uid}", method = RequestMethod.GET)
     public String getRequirementInstance(@PathVariable int id, @PathVariable String uid) throws JsonProcessingException
     {
         RequirementInstance instance = instance_repo.findById(id);
@@ -93,7 +124,7 @@ public class ApiController
         return mapper.writeValueAsString(instance);
     }
 
-    @RequestMapping(path = "/document/{guid}/{uid}")
+    @RequestMapping(path = "/document/{guid}/{uid}", method = RequestMethod.GET)
     public String getDocument(@PathVariable String guid, @PathVariable String uid) throws JsonProcessingException
     {
         Document doc = doc_repo.findByGuid(guid);
@@ -109,5 +140,158 @@ public class ApiController
 
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(doc);
+    }
+
+    @RequestMapping(path = "/majors", method = RequestMethod.GET)
+    public String getAllMajors() throws JsonProcessingException
+    {
+        Iterable<Major> majorIterable = major_repo.findAll();
+        List<Major> majors = new ArrayList<Major>();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        for(Major major : majorIterable)
+        {
+            majors.add(major);
+        }
+
+        return mapper.writeValueAsString(majors.toArray());
+    }
+
+    @RequestMapping(path = "/terms", method = RequestMethod.GET)
+    public String getAllTerms() throws JsonProcessingException
+    {
+        Iterable<Term> termIterable = term_repo.findAll();
+        List<Term> terms = new ArrayList<Term>();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        for(Term term : termIterable)
+        {
+            terms.add(term);
+        }
+
+        return mapper.writeValueAsString(terms.toArray());
+    }
+
+    @RequestMapping(path = "/requirement-status", method = RequestMethod.GET)
+    public String getAllRequirementStatuses() throws JsonProcessingException
+    {
+        Iterable<RequirementStatus> statusIterable = request_status_repo.findAll();
+        List<RequirementStatus> statuses = new ArrayList<RequirementStatus>();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        for(RequirementStatus status : statusIterable)
+        {
+            statuses.add(status);
+        }
+
+        return mapper.writeValueAsString(statuses.toArray());
+    }
+
+    @RequestMapping(path = "/approval-status", method = RequestMethod.GET)
+    public String getAllApprovalStatuses() throws JsonProcessingException
+    {
+        Iterable<ApprovalStatus> statusIterable = approval_status_repo.findAll();
+        List<ApprovalStatus> statuses = new ArrayList<ApprovalStatus>();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        for(ApprovalStatus status : statusIterable)
+        {
+            statuses.add(status);
+        }
+
+        return mapper.writeValueAsString(statuses.toArray());
+    }
+
+    @RequestMapping(path = "/requirements", method = RequestMethod.GET)
+    public String getAllRequirements() throws JsonProcessingException
+    {
+        Iterable<Requirement> requirementIterable = requirement_repo.findAll();
+        List<Requirement> requirements = new ArrayList<Requirement>();
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(SerializationFeature.INDENT_OUTPUT);
+        for(Requirement req : requirementIterable)
+        {
+            requirements.add(req);
+        }
+
+        return mapper.writeValueAsString(requirements.toArray());
+    }
+
+    /* Database Manipulation Methods: POST */
+
+    @RequestMapping(path = "/admins/{uid}", method = RequestMethod.POST)
+    public String createAdminUser(@PathVariable String uid) throws JsonProcessingException
+    {
+        admin_repo.save(new AdminUser(uid));
+        return "{\"message\": \"Created new administrator user with UID " + uid + ".\"}";
+    }
+
+    @RequestMapping(path = "/students", method = RequestMethod.POST, consumes = "application/json")
+    public String createStudent(@RequestBody String jsonString) throws JsonProcessingException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        CreateStudentRequest req = mapper.readValue(jsonString, CreateStudentRequest.class);
+        student_repo.save(new Student(req.uid, req.major, req.grad_term, req.grad_year));
+        return "{\"message\": \"Created new student with UID " + req.uid + ".\"}";
+    }
+
+    @RequestMapping(path = "/documents", method = RequestMethod.POST, consumes = "application/json")
+    public String createDocument(@RequestBody String jsonString) throws JsonProcessingException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        CreateDocumentRequest req = mapper.readValue(jsonString, CreateDocumentRequest.class);
+        String guid = UUID.randomUUID().toString();
+        doc_repo.save(new Document(guid, req.file_extension, "Pending Approval", req.requirement_instance_id,
+                req.student_uid, new Date()));
+        return "{\"message\": \"Created new document with GUID " + guid + ".\"}";
+    }
+
+    @RequestMapping(path = "/requirements", method = RequestMethod.POST, consumes = "application/json")
+    public String createRequirement(@RequestBody String jsonString) throws JsonProcessingException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        CreateRequirementRequest req = mapper.readValue(jsonString, CreateRequirementRequest.class);
+        Requirement newReq = new Requirement(req.major, req.description, req.documentation_required);
+        requirement_repo.save(newReq);
+        return "{\"message\": \"Created new requirement with ID " + newReq.getID() + ".\"}";
+    }
+
+    @RequestMapping(path = "/requirement-instance", method = RequestMethod.POST, consumes = "application/json")
+    public String createRequirementInstance(@RequestBody String jsonString) throws JsonProcessingException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        CreateRequirementInstanceRequest req = mapper.readValue(jsonString, CreateRequirementInstanceRequest.class);
+        RequirementInstance instance;
+
+        //Both doc_guid and retake_date null
+        if(req.doc_guid == null && req.retake_date == null)
+        {
+            instance = new RequirementInstance(req.requirement_id, req.student_uid, req.status);
+        }
+        //doc_guid provided, retake_date null
+        else if(req.retake_date == null)
+        {
+            instance = new RequirementInstance(req.requirement_id, req.student_uid, req.status, req.doc_guid);
+        }
+        //doc_guid null, retake_date provided
+        else if(req.doc_guid == null)
+        {
+            instance = new RequirementInstance(req.requirement_id, req.student_uid, req.status, req.retake_date);
+        }
+        //Both doc_guid and retake_date are set
+        else
+        {
+            instance = new RequirementInstance(req.requirement_id, req.student_uid, req.status, req.doc_guid, req.retake_date);
+        }
+
+        instance_repo.save(instance);
+        return "{\"message\": \"Created new requirement instance with ID " + instance.getID() + ".\"}";
+    }
+
+    @RequestMapping(path = "/majors/{name}", method = RequestMethod.POST)
+    public String createMajor(@PathVariable String name) throws JsonProcessingException
+    {
+        major_repo.save(new Major(name));
+        return "{\"message\": \"Created new major " + name + ".\"}";
     }
 }

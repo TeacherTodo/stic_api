@@ -2,7 +2,7 @@ package edu.nau.stic_api.DataStructures;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import java.security.Timestamp;
+import java.util.Date;
 
 @Entity
 public class Document
@@ -13,11 +13,11 @@ public class Document
     private String approval_status;
     private int requirement_instance_id;
     private String student_uid;
-    private Timestamp upload_timestamp;
+    private Date upload_timestamp;
 
     protected Document() {}
 
-    public Document(String guid, String file_extension, String approval_status, int requirement_instance_id, String student_uid, Timestamp upload_timestamp)
+    public Document(String guid, String file_extension, String approval_status, int requirement_instance_id, String student_uid, Date upload_timestamp)
     {
         this.guid = guid;
         this.file_extension = file_extension;
@@ -51,7 +51,7 @@ public class Document
         return this.student_uid;
     }
 
-    public Timestamp getUploadTimestamp()
+    public Date getUploadTimestamp()
     {
         return this.upload_timestamp;
     }

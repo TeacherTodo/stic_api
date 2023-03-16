@@ -25,6 +25,13 @@ public class Requirement
         this.documentation_required = documentation_required;
     }
 
+    public Requirement(String major, String description, boolean documentation_required)
+    {
+        this.major = major;
+        this.description = description;
+        this.documentation_required = documentation_required;
+    }
+
     public int getID()
     {
         return this.id;
