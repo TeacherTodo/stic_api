@@ -9,6 +9,7 @@ import edu.nau.stic_api.DataStructures.Term;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class SticApiApplication {
@@ -17,6 +18,7 @@ public class SticApiApplication {
 		SpringApplication.run(SticApiApplication.class, args);
 	}
 
+	@Bean
 	public CommandLineRunner setup(TermRepository term_repo, ApprovalStatusRepository approval_repo, RequirementStatusRepository req_repo)
 	{
 		return (args) -> {
