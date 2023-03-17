@@ -261,10 +261,10 @@ public class ApiController
 
     /* Database Manipulation Methods: POST */
 
-    @RequestMapping(path = "/admins/{uid}", method = RequestMethod.POST)
-    public String createAdminUser(@PathVariable String uid) throws JsonProcessingException
+    @RequestMapping(path = "/admins/{uid}/{name}", method = RequestMethod.POST)
+    public String createAdminUser(@PathVariable String uid, @PathVariable String name) throws JsonProcessingException
     {
-        admin_repo.save(new AdminUser(uid));
+        admin_repo.save(new AdminUser(uid, name));
         return "{\"message\": \"Created new administrator user with UID " + uid + ".\"}";
     }
 
