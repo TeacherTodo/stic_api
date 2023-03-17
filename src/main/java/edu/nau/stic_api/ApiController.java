@@ -400,4 +400,11 @@ public class ApiController
         major_repo.deleteById(name);
         return "{\"message\": \"Deleted major with name " + name + ".\"}";
     }
+
+    @RequestMapping(path = "/admin/{uid}", method = RequestMethod.DELETE)
+    public String deleteAdmin(@PathVariable String uid)
+    {
+        admin_repo.deleteById(uid);
+        return "{\"message\": \"Deleted admin with UID " + uid + ".\"}";
+    }
 }
