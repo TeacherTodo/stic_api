@@ -217,6 +217,48 @@ public class ApiController
         return mapper.writeValueAsString(requirements.toArray());
     }
 
+    @RequestMapping(path = "/requirement/{id}", method = RequestMethod.GET)
+    public String getRequirement(@PathVariable int id) throws JsonProcessingException
+    {
+        Requirement req = requirement_repo.findById(id);
+
+        if(req != null)
+        {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(req);
+        }
+
+        return "{\"error\": \"Unable to locate requirement with ID of " + id + ".\"}";
+    }
+
+    @RequestMapping(path = "/major/{name}", method = RequestMethod.GET)
+    public String getMajor(@PathVariable String name) throws JsonProcessingException
+    {
+        Major major = major_repo.findByMajor(name);
+
+        if(major != null)
+        {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(major);
+        }
+
+        return "{\"error\": \"Unable to locate major with name of " + name + ".\"}";
+    }
+
+    @RequestMapping(path = "/term/{name}", method = RequestMethod.GET)
+    public String getTerm(@PathVariable String name) throws JsonProcessingException
+    {
+        Term term = term_repo.findByTerm(name);
+
+        if(term != null)
+        {
+            ObjectMapper mapper = new ObjectMapper();
+            return mapper.writeValueAsString(term);
+        }
+
+        return "{\"error\": \"Unable to locate term with name of " + name + ".\"}";
+    }
+
     /* Database Manipulation Methods: POST */
 
     @RequestMapping(path = "/admins/{uid}", method = RequestMethod.POST)
