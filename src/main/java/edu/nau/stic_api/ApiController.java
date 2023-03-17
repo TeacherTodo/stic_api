@@ -372,4 +372,32 @@ public class ApiController
         student_repo.save(student);
         return "{\"message\": \"Updated student with UID " + student.getUID() + ".\"}";
     }
+
+    @RequestMapping(path = "/requirement/{id}", method = RequestMethod.DELETE)
+    public String deleteRequirement(@PathVariable int id)
+    {
+        requirement_repo.deleteById(id);
+        return "{\"message\": \"Deleted requirement with ID " + id + ".\"}";
+    }
+
+    @RequestMapping(path = "/requirement-instance/{id}", method = RequestMethod.DELETE)
+    public String deleteRequirementInstance(@PathVariable int id)
+    {
+        instance_repo.deleteById(id);
+        return "{\"message\": \"Deleted requirement instance with ID " + id + ".\"}";
+    }
+
+    @RequestMapping(path = "/document/{guid}", method = RequestMethod.DELETE)
+    public String deleteDocument(@PathVariable String guid)
+    {
+        doc_repo.deleteById(guid);
+        return "{\"message\": \"Deleted document with GUID " + guid + ".\"}";
+    }
+
+    @RequestMapping(path = "/major/{name}", method = RequestMethod.DELETE)
+    public String deleteMajor(@PathVariable String name)
+    {
+        major_repo.deleteById(name);
+        return "{\"message\": \"Deleted major with name " + name + ".\"}";
+    }
 }
