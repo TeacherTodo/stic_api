@@ -336,4 +336,40 @@ public class ApiController
         major_repo.save(new Major(name));
         return "{\"message\": \"Created new major " + name + ".\"}";
     }
+
+    @RequestMapping(path = "/requirement", method = RequestMethod.POST)
+    public String editRequirement(@RequestBody String jsonString) throws JsonProcessingException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        Requirement req = mapper.readValue(jsonString, Requirement.class);
+        requirement_repo.save(req);
+        return "{\"message\": \"Updated requirement with ID " + req.getID() + ".\"}";
+    }
+
+    @RequestMapping(path = "/requirement-instance", method = RequestMethod.POST)
+    public String editRequirementInstance(@RequestBody String jsonString) throws JsonProcessingException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        RequirementInstance instance = mapper.readValue(jsonString, RequirementInstance.class);
+        instance_repo.save(instance);
+        return "{\"message\": \"Updated requirement instance with ID " + instance.getID() + ".\"}";
+    }
+
+    @RequestMapping(path = "/document", method = RequestMethod.POST)
+    public String editDocument(@RequestBody String jsonString) throws JsonProcessingException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        Document doc = mapper.readValue(jsonString, Document.class);
+        doc_repo.save(doc);
+        return "{\"message\": \"Updated document with GUID " + doc.getGUID() + ".\"}";
+    }
+
+    @RequestMapping(path = "/student", method = RequestMethod.POST)
+    public String editStudent(@RequestBody String jsonString) throws JsonProcessingException
+    {
+        ObjectMapper mapper = new ObjectMapper();
+        Student student = mapper.readValue(jsonString, Student.class);
+        student_repo.save(student);
+        return "{\"message\": \"Updated student with UID " + student.getUID() + ".\"}";
+    }
 }
