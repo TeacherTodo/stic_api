@@ -293,7 +293,7 @@ public class ApiController
     {
         ObjectMapper mapper = new ObjectMapper();
         CreateRequirementRequest req = mapper.readValue(jsonString, CreateRequirementRequest.class);
-        Requirement newReq = new Requirement(req.major, req.description, req.documentation_required);
+        Requirement newReq = new Requirement(req.major, req.title, req.description, req.documentation_required);
         requirement_repo.save(newReq);
         return "{\"message\": \"Created new requirement with ID " + newReq.getID() + ".\"}";
     }

@@ -12,22 +12,25 @@ public class Requirement
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private String major;
+    private String title;
     private String description;
     private boolean documentation_required;
 
     protected Requirement() {}
 
-    public Requirement(int id, String major, String description, boolean documentation_required)
+    public Requirement(int id, String major, String title, String description, boolean documentation_required)
     {
         this.id = id;
         this.major = major;
+        this.title = title;
         this.description = description;
         this.documentation_required = documentation_required;
     }
 
-    public Requirement(String major, String description, boolean documentation_required)
+    public Requirement(String major, String title, String description, boolean documentation_required)
     {
         this.major = major;
+        this.title = title;
         this.description = description;
         this.documentation_required = documentation_required;
     }
@@ -41,6 +44,8 @@ public class Requirement
     {
         return this.major;
     }
+
+    public String getTitle() {return  this.title;}
 
     public String getDescription()
     {
@@ -56,6 +61,8 @@ public class Requirement
     {
         this.major = major;
     }
+
+    public void setTitle(String title) {this.title = title;}
 
     public void setDescription(String description)
     {
