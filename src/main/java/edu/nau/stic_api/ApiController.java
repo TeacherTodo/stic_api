@@ -259,6 +259,28 @@ public class ApiController
         return "{\"error\": \"Unable to locate term with name of " + name + ".\"}";
     }
 
+    @RequestMapping(path = "/docs-all", method = RequestMethod.GET)
+    public String allDocs() throws JsonProcessingException
+    {
+        Iterable<Document> documentIterable = doc_repo.findAll();
+        List<Document> docs = new ArrayList<Document>();
+        ObjectMapper mapper = new ObjectMapper();
+        for(Document doc : documentIterable)
+        {
+            docs.add(doc);
+        }
+
+        return mapper.writeValueAsString(docs.toArray());
+    }
+
+    @RequestMapping(path = "/docs-pending", method = RequestMethod.GET)
+    public String pendingDocs() throws JsonProcessingException
+    {
+        List<Document> docs = doc_repo.findByStatus("Pending Approval");
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.writeValueAsString(docs.toArray());
+    }
+
     /* Database Manipulation Methods: POST */
 
     @RequestMapping(path = "/admins/{uid}/{name}", method = RequestMethod.POST)
