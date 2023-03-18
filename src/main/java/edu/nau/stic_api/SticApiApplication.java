@@ -32,6 +32,11 @@ public class SticApiApplication {
 			req_repo.save(new RequirementStatus("Complete"));
 			req_repo.save(new RequirementStatus("Incomplete"));
 			req_repo.save(new RequirementStatus("Overdue"));
+
+
+			req_repo.save(new Request("Education", "Submit Score of Arizona Teacher Proficiency Assessment", "You must upload a passing score for administrator review on the required subject knowledge portion of the Arizona Teacher Proficiency Assessment that corresponds to the teaching certificate that you are pursuing.", true));
+			req_repo.save(new Request("Education", "Submit Degree Transcripts", "You must submit your official transcripts documenting a Bachelors or more advanced degree.", true));
+			req_repo.save(new Request("Computer Science", "Complete Capstone", "Get er' done.", false));
 		};
 	}
 }
