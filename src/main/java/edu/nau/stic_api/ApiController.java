@@ -306,7 +306,7 @@ public class ApiController
         CreateDocumentRequest req = mapper.readValue(jsonString, CreateDocumentRequest.class);
         String guid = UUID.randomUUID().toString();
         doc_repo.save(new Document(guid, req.file_extension, "Pending Approval", req.requirement_instance_id,
-                req.student_uid, new Date()));
+                req.student_uid, req.student_name, new Date()));
         return "{\"message\": \"Created new document with GUID " + guid + ".\"}";
     }
 
