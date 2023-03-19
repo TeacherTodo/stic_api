@@ -16,8 +16,10 @@ public class RequirementInstance
     private String student;
     private String status;
     @Nullable
+    @JsonProperty("doc_guid")
     private String doc_guid;
     @Nullable
+    @JsonProperty("retake_date")
     private Date retake_date;
 
     protected RequirementInstance() {}
