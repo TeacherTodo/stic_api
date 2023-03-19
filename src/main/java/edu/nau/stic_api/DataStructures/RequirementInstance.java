@@ -12,14 +12,14 @@ public class RequirementInstance
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
     private int requirement_id;
-    @JsonProperty("student_uid")
+    //@JsonProperty("student_uid")
     private String student;
     private String status;
     @Nullable
-    @JsonProperty("doc_guid")
+    //@JsonProperty("doc_guid")
     private String doc_guid;
     @Nullable
-    @JsonProperty("retake_date")
+    //@JsonProperty("retake_date")
     private Date retake_date;
 
     protected RequirementInstance() {}
@@ -105,11 +105,13 @@ public class RequirementInstance
         return this.id;
     }
 
+    @JsonProperty("requirement_id")
     public int getRequirementID()
     {
         return this.requirement_id;
     }
 
+    @JsonProperty("student_uid")
     public String getStudentUID()
     {
         return this.student;
@@ -120,11 +122,13 @@ public class RequirementInstance
         return this.status;
     }
 
+    @JsonProperty("doc_guid")
     public String getDocGUID()
     {
         return this.doc_guid;
     }
 
+    @JsonProperty("retake_date")
     public Date getRetakeDate()
     {
         return this.retake_date;
