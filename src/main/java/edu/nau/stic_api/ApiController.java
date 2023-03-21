@@ -6,7 +6,15 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import edu.nau.stic_api.DataRepos.*;
 import edu.nau.stic_api.DataStructures.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.ContentDisposition;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -125,21 +133,55 @@ public class ApiController
     }
 
     @RequestMapping(path = "/document/{guid}/{uid}", method = RequestMethod.GET)
-    public String getDocument(@PathVariable String guid, @PathVariable String uid) throws JsonProcessingException
+    public String getDocument(@PathVariable String guid, @PathVariable String uid) throws Exception
     {
         Document doc = doc_repo.findByGuid(guid);
 
         if(doc == null)
         {
-            return "{\"error\": \"Unable to find document instance with GUID of " + guid + ".\"}";
+            return  "{\"error\": \"Unable to find document instance with GUID of " + guid + ".\"}";
         }
         else if(!doc.getStudentUID().equals(uid))
         {
-            return "{\"error\": \"UID listed on document does not match " + uid + ".\"}";
+            return  "{\"error\": \"UID listed on document does not match " + uid + ".\"}";
         }
+
+        /*
+        ByteArrayResource resource = new ByteArrayResource(S3_Helper.downloadFile(doc.getGUID(), doc.getFileExtension()));
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentLength(resource.contentLength())
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        ContentDisposition.attachment()
+                                .filename("document")
+                                .build().toString())
+                .body(resource);
+         */
 
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(doc);
+    }
+
+    @RequestMapping(path = "/document-content/{guid}/{fileExtension}", method = RequestMethod.GET)
+    public ResponseEntity<Resource> getFileContent(@PathVariable String guid, @PathVariable String fileExtension) throws IOException
+    {
+        byte[] content = S3_Helper.downloadFile(guid, fileExtension);
+        ByteArrayResource resource = new ByteArrayResource(content);
+        return ResponseEntity.ok()
+                .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                .contentLength(resource.contentLength())
+                .header(HttpHeaders.CONTENT_DISPOSITION,
+                        ContentDisposition.attachment()
+                                .filename(guid + "." + fileExtension)
+                                .build().toString())
+                .body(resource);
+    }
+
+    @RequestMapping(path = "/document-content/{guid}/{fileExtension}", method = RequestMethod.POST)
+    public String postFileContent(@PathVariable String guid, @PathVariable String fileExtension, @RequestBody byte data[]) throws IOException
+    {
+        S3_Helper.uploadFile(guid, fileExtension, data);
+        return "{\"message\": \"Successfully uploaded file content to S3.\"}";
     }
 
     @RequestMapping(path = "/majors", method = RequestMethod.GET)
