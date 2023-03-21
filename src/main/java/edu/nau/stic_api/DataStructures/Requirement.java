@@ -21,7 +21,7 @@ public class Requirement
     public Requirement(int id, String major, String title, String description, boolean documentation_required)
     {
         this.id = id;
-        this.major = major;
+        this.major = major; // TODO a requirement doesnt need to be mapped to a major, we should use a join table
         this.title = title;
         this.description = description;
         this.documentation_required = documentation_required;

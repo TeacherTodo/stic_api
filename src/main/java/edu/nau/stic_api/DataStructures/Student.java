@@ -51,4 +51,14 @@ public class Student
     {
         this.grad_year = grad_year;
     }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "uid='" + uid + '\'' +
+                ", major='" + major + '\'' +
+                ", grad_term='" + grad_term + '\'' +
+                ", grad_year=" + grad_year +
+                '}';
+    }
 }

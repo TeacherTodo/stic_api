@@ -18,6 +18,8 @@ public class SticApiApplication {
 	public CommandLineRunner setup(TermRepository term_repo, ApprovalStatusRepository approval_repo, RequirementStatusRepository req_repo, RequirementRepository requirement_repo,
 											 RequirementInstanceRepository instance_repo, StudentRepository student_repo)
 	{
+		InitilizeDatabase.initilizeDatabase();
+
 		return (args) -> {
 			term_repo.save(new Term("Fall"));
 			term_repo.save(new Term("Spring"));
