@@ -25,4 +25,11 @@ public class Major
     {
         this.major = major;
     }
+
+    @Override
+    public String toString() {
+        return "Major{" +
+                "major='" + major + '\'' +
+                '}';
+    }
 }

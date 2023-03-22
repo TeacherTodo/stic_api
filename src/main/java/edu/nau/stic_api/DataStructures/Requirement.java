@@ -73,4 +73,15 @@ public class Requirement
     {
         this.documentation_required = documentation_required;
     }
+
+    @Override
+    public String toString() {
+        return "Requirement{" +
+                "id=" + id +
+                ", major='" + major + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", documentation_required=" + documentation_required +
+                '}';
+    }
 }
