@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 public class Requirement
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.AUTO) //TODO: i think this is the issue
     private int id;
     private String major;
     private String title;

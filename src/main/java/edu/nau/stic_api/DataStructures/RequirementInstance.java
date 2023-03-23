@@ -9,7 +9,7 @@ import java.util.Date;
 public class RequirementInstance
 {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+//    @GeneratedValue(strategy = GenerationType.AUTO) //TODO: i think this is the issue
     private int id;
     private int requirement_id;
     //@JsonProperty("student_uid")
