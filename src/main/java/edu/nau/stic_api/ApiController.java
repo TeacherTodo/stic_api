@@ -346,10 +346,10 @@ public class ApiController
     {
         ObjectMapper mapper = new ObjectMapper();
         CreateDocumentRequest req = mapper.readValue(jsonString, CreateDocumentRequest.class);
-        String guid = UUID.randomUUID().toString();
-        doc_repo.save(new Document(guid, req.file_extension, "Pending Approval", req.requirement_instance_id,
+//        String guid = UUID.randomUUID().toString();
+        doc_repo.save(new Document(req.file_guid, req.file_extension, "Pending Approval", req.requirement_instance_id,
                 req.student_uid, req.student_name, new Date()));
-        return "{\"message\": \"Created new document with GUID " + guid + ".\"}";
+        return "{\"message\": \"Created new document with GUID " + req.file_guid + ".\"}";
     }
 
     @RequestMapping(path = "/requirements", method = RequestMethod.POST, consumes = "application/json")
