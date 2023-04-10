@@ -30,6 +30,15 @@ public class FileMakerPro {
 
         Iterator<Row> studentRows = getStudentRows(sheet);
 
+        // TODO: start of testing
+//        int count = 0;
+//        while (studentRows.hasNext()) {
+//            count++;
+//            System.out.println("Count: " + count);
+//            Student student = getStudent(sheet, studentRows.next());
+//        }
+        // TODO: end of testing
+
         try {
             studentRows.forEachRemaining(row -> {
                 try {
@@ -39,7 +48,11 @@ public class FileMakerPro {
                 }
             });
         } catch (RuntimeException e) {
-            throw new InvalidFormatException(e.getMessage());
+            if (e.getCause() instanceof InvalidFormatException) {
+                throw (InvalidFormatException) e.getCause();
+            } else {
+                throw e;
+            }
         }
 
         return students;
@@ -56,13 +69,39 @@ public class FileMakerPro {
 
     private static Iterator<Row> getStudentRows(Sheet sheet) {
         Iterator<Row> students = sheet.rowIterator();
+
+        // TODO: start of testing
+//        int count = 0;
+//        while(students.hasNext()) {
+//            count++;
+//            students.next();
+//        }
+//        System.out.println("getStudentRows(): students.rowIterator.count: " + count);
+//
+//        students = sheet.rowIterator();
+//        students.next();
+//        count = 0;
+//        while(students.hasNext()) {
+//            count++;
+//            students.next();
+//        }
+//        System.out.println("getStudentRows(): students.rowIterator.count: " + count);
+//
+//        students = sheet.rowIterator();
+        // TODO: end of testing
+
         students.next(); // Skip header row
-        students.remove(); // Remove header row
 
         return students;
     }
 
-    public static Student getStudent(Sheet sheet, Row row) throws InvalidFormatException {
+    private static Student getStudent(Sheet sheet, Row row) throws InvalidFormatException {
+        // TODO: start of testing
+//        System.out.println("--- getStudent()");
+//        row.cellIterator().forEachRemaining(System.out::println);
+//        System.out.println("--- END getStudent()\n");
+        // TODO: end of testing
+
         Student student = new Student();
         student.setUid(getStudentEmail(row));
         student.setMajor(getStudentPlan(row));
