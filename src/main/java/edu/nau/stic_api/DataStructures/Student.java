@@ -9,10 +9,10 @@ public class Student
     @Id
     private String uid;
     private String major;
-    private String grad_term;
-    private int grad_year;
+    private String grad_term; // might want to change this to term
+    private int grad_year; // might want to change this to year
 
-    protected Student() {}
+    public Student() {}
 
     public Student(String uid, String major, String grad_term, int grad_year)
     {
@@ -21,6 +21,36 @@ public class Student
         this.grad_term = grad_term;
         this.grad_year = grad_year;
     }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    public String getGrad_term() {
+        return grad_term;
+    }
+
+    public void setGrad_term(String grad_term) {
+        this.grad_term = grad_term;
+    }
+
+    public int getGrad_year() {
+        return grad_year;
+    }
+
+    public void setGrad_year(int grad_year) {
+        this.grad_year = grad_year;
+    }
+
+    // od code, will refactor later
 
     public String getUID()
     {
