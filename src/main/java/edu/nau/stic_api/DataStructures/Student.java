@@ -1,5 +1,6 @@
 package edu.nau.stic_api.DataStructures;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
@@ -11,6 +12,8 @@ public class Student
     private String major;
     private String grad_term; // might want to change this to term
     private int grad_year; // might want to change this to year
+    private String first_name;
+    private String last_name;
 
     public Student() {}
 
@@ -71,6 +74,10 @@ public class Student
     {
         return this.grad_year;
     }
+
+    public String getFirst_name() { return first_name; }
+
+    public String getLastName() { return last_name; }
 
     public void setGradTerm(String grad_term)
     {
