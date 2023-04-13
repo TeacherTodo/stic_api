@@ -471,4 +471,22 @@ public class ApiController
         admin_repo.deleteById(uid);
         return "{\"message\": \"Deleted admin with UID " + uid + ".\"}";
     }
+
+    @RequestMapping(path = "/admin/approve-document/{guid}", method = RequestMethod.GET)
+    public String approveDocument(@PathVariable String guid)
+    {
+        Document doc = doc_repo.findByGuid(guid);
+        doc.setApprovalStatus("Approved");
+        doc_repo.save(doc);
+        return "{\"message\": \"Updated document status to approved.\"}";
+    }
+
+    @RequestMapping(path = "/admin/deny-document/{guid}", method = RequestMethod.GET)
+    public String denyDocument(@PathVariable String guid)
+    {
+        Document doc = doc_repo.findByGuid(guid);
+        doc.setApprovalStatus("Denied");
+        doc_repo.save(doc);
+        return "{\"message\": \"Updated document status to denied.\"}";
+    }
 }
