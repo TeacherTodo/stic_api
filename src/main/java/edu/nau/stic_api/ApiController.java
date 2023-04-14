@@ -3,6 +3,7 @@ package edu.nau.stic_api;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.google.common.collect.Lists;
 import edu.nau.stic_api.DataRepos.*;
 import edu.nau.stic_api.DataStructures.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +19,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api", produces = "application/json")
@@ -86,14 +86,15 @@ public class ApiController
     public String getAllStudents() throws JsonProcessingException
     {
         Iterable<Student> studentIterator = student_repo.findAll();
-        List<Student> students = new ArrayList<Student>();
+        List<Student> students = Lists.newArrayList(studentIterator);
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        for(Student student : studentIterator)
-        {
-            students.add(student);
-        }
+        System.out.println("getAllStudents(): ObjectMapper(): " + mapper.writeValueAsString(students.get(0)));
+
+//        System.out.println("getAllStudents(): toString()");
+//        students.forEach(System.out::println);
+//        System.out.println("getAllStudents() ObjectMapper(): " + mapper.writeValueAsString(students.toArray()));
 
         return mapper.writeValueAsString(students.toArray());
     }
@@ -434,7 +435,7 @@ public class ApiController
         ObjectMapper mapper = new ObjectMapper();
         Student student = mapper.readValue(jsonString, Student.class);
         student_repo.save(student);
-        return "{\"message\": \"Updated student with UID " + student.getUID() + ".\"}";
+        return "{\"message\": \"Updated student with UID " + student.getUid() + ".\"}";
     }
 
     @RequestMapping(path = "/requirement/{id}", method = RequestMethod.DELETE)

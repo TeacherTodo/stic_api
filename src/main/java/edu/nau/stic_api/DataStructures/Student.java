@@ -1,91 +1,103 @@
 package edu.nau.stic_api.DataStructures;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.google.common.hash.Hashing;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
+import java.nio.charset.StandardCharsets;
+
 @Entity
-public class Student
-{
+public class Student {
     @Id
     private String uid;
+    private String first_name;
+    private String last_name;
     private String major;
     private String grad_term; // might want to change this to term
     private int grad_year; // might want to change this to year
-    private String first_name;
-    private String last_name;
 
-    public Student() {}
+    public Student() {
+    }
 
-    public Student(String uid, String major, String grad_term, int grad_year)
-    {
+    public Student(String uid, String major, String grad_term, int grad_year) {
         this.uid = uid;
         this.major = major;
         this.grad_term = grad_term;
         this.grad_year = grad_year;
     }
 
-//    public String getUid() {
-//        return uid;
-//    }
-//
-//    public void setUid(String uid) {
-//        this.uid = uid;
-//    }
-//
-//    public void setMajor(String major) {
-//        this.major = major;
-//    }
-//
-//    public String getGrad_term() {
-//        return grad_term;
-//    }
-//
-//    public void setGrad_term(String grad_term) {
-//        this.grad_term = grad_term;
-//    }
-//
-//    public int getGrad_year() {
-//        return grad_year;
-//    }
-//
-//    public void setGrad_year(int grad_year) {
-//        this.grad_year = grad_year;
-//    }
-
-    // od code, will refactor later
-
-    public String getUID()
-    {
-        return this.uid;
+    public Student(String uid, String first_name, String last_name, String major, String grad_term, int grad_year) {
+        this.uid = uid;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.major = major;
+        this.grad_term = grad_term;
+        this.grad_year = grad_year;
     }
 
-    public String getMajor()
-    {
-        return this.major;
+    @JsonProperty("uid")
+    public String getUid() {
+        return uid;
     }
 
-    public String getGradTerm()
-    {
-        return this.grad_term;
+    @JsonProperty("uid")
+    public void setUid(String email) {
+        String hashedUid = Hashing.sha256()
+                                  .hashString(email, StandardCharsets.UTF_8)
+                                  .toString();
+
+        this.uid = hashedUid;
     }
 
-    public int getGradYear()
-    {
-        return this.grad_year;
+    @JsonProperty("firstName")
+    public String getFirst_name() {
+        return first_name;
     }
 
-    public String getFirst_name() { return first_name; }
+    @JsonProperty("firstName")
+    public void setFirst_name(String first_name) {
+        this.first_name = first_name;
+    }
 
-    public String getLastName() { return last_name; }
+    @JsonProperty("lastName")
+    public String getLast_name() {
+        return last_name;
+    }
 
-    public void setGradTerm(String grad_term)
-    {
+    @JsonProperty("lastName")
+    public void setLast_name(String last_name) {
+        this.last_name = last_name;
+    }
+
+    @JsonProperty("major")
+    public String getMajor() {
+        return major;
+    }
+
+    @JsonProperty("major")
+    public void setMajor(String major) {
+        this.major = major;
+    }
+
+    @JsonProperty("gradTerm")
+    public String getGrad_term() {
+        return grad_term;
+    }
+
+    @JsonProperty("gradTerm")
+    public void setGrad_term(String grad_term) {
         this.grad_term = grad_term;
     }
 
-    public void setGradYear(int grad_year)
-    {
+    @JsonProperty("gradYear")
+    public int getGrad_year() {
+        return grad_year;
+    }
+
+    @JsonProperty("gradYear")
+    public void setGrad_year(int grad_year) {
         this.grad_year = grad_year;
     }
 
@@ -93,9 +105,11 @@ public class Student
     public String toString() {
         return "Student{" +
                 "uid='" + uid + '\'' +
+                ", firsName='" + first_name + '\'' +
+                ", lastName='" + last_name + '\'' +
                 ", major='" + major + '\'' +
-                ", grad_term='" + grad_term + '\'' +
-                ", grad_year=" + grad_year +
+                ", gradTerm='" + grad_term + '\'' +
+                ", gradYear=" + grad_year +
                 '}';
     }
 }

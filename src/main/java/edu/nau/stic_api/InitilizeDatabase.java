@@ -14,7 +14,6 @@ import com.google.common.hash.Hashing;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class InitilizeDatabase {
 
@@ -68,17 +67,24 @@ public class InitilizeDatabase {
         List<String> terms = List.of("Fall", "Spring");
         List<Integer> years = List.of(2023, 2024);
 
+        List<String> firstNames = List.of("John", "Paul", "George", "Ringo", "Pete", "Stu", "Mick", "Keith", "Brian", "Charlie", "Eric", "Bill", "David", "Mike", "Tom", "Chris", "Bob", "Bruce", "Roger", "John", "Paul", "George", "Ringo", "Pete", "Stu", "Mick", "Keith", "Brian", "Charlie", "Eric", "Bill", "David", "Mike", "Tom", "Chris", "Bob", "Bruce", "Roger", "John", "Paul", "George", "Ringo", "Pete", "Stu", "Mick", "Keith", "Brian", "Charlie", "Eric", "Bill", "David", "Mike", "Tom", "Chris", "Bob", "Bruce", "Roger", "John", "Paul", "George", "Ringo", "Pete", "Stu", "Mick", "Keith", "Brian", "Charlie", "Eric", "Bill", "David", "Mike", "Tom", "Chris", "Bob", "Bruce", "Roger", "John", "Paul", "George", "Ringo", "Pete", "Stu", "Mick", "Keith", "Brian", "Charlie", "Eric", "Bill", "David", "Mike", "Tom", "Chris", "Bob", "Bruce", "Roger", "John", "Paul", "George", "Ringo", "Pete", "Stu", "Mick", "Keith", "Brian", "Charlie", "Eric", "Bill", "David", "Mike", "Tom", "Chris", "Bob", "Bruce", "Roger", "John", "Paul", "George", "Ringo", "Pete", "Stu", "Mick", "Keith", "Brian", "Charlie", "Eric", "Bill", "David", "Mike", "Tom", "Chris", "Bob", "Bruce", "Roger", "John", "Paul", "George", "Ringo", "Pete", "Stu", "Mick", "Keith", "Brian", "Charlie", "Eric", "Bill", "David", "Mike", "Tom", "Chris", "Bob", "Bruce", "Roger");
+        List<String> lastNames = List.of("Lennon", "McCartney", "Harrison", "Starr", "Townshend", "Sutcliffe", "Jagger", "Richards", "Jones", "Watts", "Clapton", "Wyman", "Gilmour", "Waters", "Jagger", "Richards", "Jones", "Watts", "Clapton", "Wyman", "Gilmour", "Waters", "Lennon", "McCartney", "Harrison", "Starr", "Townshend", "Sutcliffe", "Jagger", "Richards", "Jones", "Watts", "Clapton", "Wyman", "Gilmour", "Waters", "Jagger", "Richards", "Jones", "Watts", "Clapton", "Wyman", "Gilmour", "Waters", "Lennon", "McCartney", "Harrison", "Starr", "Townshend", "Sutcliffe", "Jagger", "Richards", "Jones", "Watts", "Clapton", "Wyman", "Gilmour", "Waters", "Jagger", "Richards", "Jones", "Watts", "Clapton", "Wyman", "Gilmour", "Waters", "Lennon", "McCartney", "Harrison", "Starr", "Townshend", "Sutcliffe", "Jagger", "Richards", "Jones", "Watts", "Clapton", "Wyman", "Gilmour", "Waters", "Jagger", "Richards", "Jones", "Watts", "Clapton", "Wyman", "Gilmour", "Waters", "Lennon", "McCartney", "Harrison", "Starr", "Townshend", "Sutcliffe", "Jagger", "Richards", "Jones", "Watts", "Clapton", "Wyman", "Gilmour", "Waters", "Jagger", "Richards", "Jones", "Watts", "Clapton", "Wyman", "Gilmour", "Waters", "Lennon", "McCartney", "Harrison", "Starr", "Townshend", "Sutcliffe", "Jagger", "Richards");
+
+        int nameIndex = 0;
+
         for (Major major : majors) {
             for (int year : years) {
                 for (String term : terms) {
                     for (int index = 0; index < 4; index++) {
                         String email = major.getMajor() + "_" + String.valueOf(year) + "_" + term + "_" + String.format("%02d", index) + "@nau.edu";
                         String uuid = Hashing.sha256()
-                                             .hashString(email, StandardCharsets.UTF_8)
-                                             .toString();
+                                .hashString(email, StandardCharsets.UTF_8)
+                                .toString();
 
-                        Student student = new Student(uuid, major.getMajor(), term, year);
+                        Student student = new Student(uuid, firstNames.get(nameIndex), lastNames.get(nameIndex), major.getMajor(), term, year);
                         students.add(student);
+
+                        nameIndex++;
 
                         System.out.println("initilizeStudents() email: " + email);
                         System.out.println("initilizeStudents() student: " + student.toString());
@@ -100,18 +106,18 @@ public class InitilizeDatabase {
 
         for (Student student : students) {
             List<Requirement> studentRequirements = requirements.stream()
-                                                                .filter((req) -> {
-                                                                    return req.getMajor()
-                                                                              .equals(student.getMajor());
-                                                                })
-                                                                .toList();
+                    .filter((req) -> {
+                        return req.getMajor()
+                                .equals(student.getMajor());
+                    })
+                    .toList();
 
             List<RequirementInstance> studentRequirementInstances = new ArrayList<>();
 
             for (Requirement requirement : studentRequirements) {
-                int reqInstanceId = (student.getUID() + requirement.getID()).hashCode();
+                int reqInstanceId = (student.getUid() + requirement.getID()).hashCode();
 
-                RequirementInstance requirementInstance = new RequirementInstance(reqInstanceId, requirement.getID(), student.getUID(), "In Progress", null, null);
+                RequirementInstance requirementInstance = new RequirementInstance(reqInstanceId, requirement.getID(), student.getUid(), "In Progress", null, null);
 
                 requirementInstances.add(requirementInstance);
                 studentRequirementInstances.add(requirementInstance); //TODO: remove this line, using it for debug
