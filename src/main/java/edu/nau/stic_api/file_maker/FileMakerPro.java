@@ -103,10 +103,12 @@ public class FileMakerPro {
         // TODO: end of testing
 
         Student student = new Student();
-//        student.setUid(getStudentEmail(row));
-//        student.setMajor(getStudentPlan(row));
-//        student.setGrad_term(getStudentGradTerm(sheet));
-//        student.setGrad_year(getStudentGradYear(sheet));
+        student.setUid(getStudentEmail(row));
+        student.setFirst_name(getStudentFirstName(row));
+        student.setLast_name(getStudentLastName(row));
+        student.setMajor(getStudentPlan(row));
+        student.setGrad_term(getStudentGradTerm(sheet));
+        student.setGrad_year(getStudentGradYear(sheet));
 
         return student;
     }

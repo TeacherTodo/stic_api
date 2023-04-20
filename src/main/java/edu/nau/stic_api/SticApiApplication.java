@@ -18,6 +18,9 @@ public class SticApiApplication {
     @Bean
     public CommandLineRunner setup(TermRepository term_repo, ApprovalStatusRepository approval_repo, RequirementStatusRepository req_repo, RequirementRepository requirement_repo, RequirementInstanceRepository instance_repo, StudentRepository student_repo, MajorRepository major_repo) {
         InitilizeDatabase.initilizeDatabase(requirement_repo, instance_repo, student_repo, major_repo);
+//        major_repo.saveAll(FileMakerProInitilizeDatabase.createMajors());
+//        requirement_repo.saveAll(FileMakerProInitilizeDatabase.createRequirements());
+//        student_repo.saveAll(FileMakerProInitilizeDatabase.createStudents());
 
         return (args) -> {
             term_repo.save(new Term("Fall"));
