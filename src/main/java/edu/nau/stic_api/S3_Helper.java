@@ -9,6 +9,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,13 +18,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@Component
 public class S3_Helper
 {
-    @Value("${aws.accessKey}")
-    private static String accessKey;
+    private static String accessKey = "CHANGE ME";
 
-    @Value("${aws.secretKey}")
-    private static String secretKey;
+    private static String secretKey = "CHANGE ME";
 
     private static AWSCredentials credentials;
     private static AmazonS3 s3client;
@@ -43,7 +43,7 @@ public class S3_Helper
         stream.write(data);
 
         s3client.putObject("nau-stic-capstone", "Document/" + guid + "." + fileExtension,
-              new File("/tmp/" + guid + "." + fileExtension));
+                new File("/tmp/" + guid + "." + fileExtension));
 
         Path path = Paths.get("/tmp/" + guid + "." + fileExtension);
         Files.deleteIfExists(path);

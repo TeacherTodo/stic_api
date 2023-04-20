@@ -51,6 +51,9 @@ public class ApiController
     @Autowired
     private RequirementRepository requirement_repo;
 
+    @Autowired
+    private S3_Helper s3Server;
+
     /* Database Access Methods: GET */
 
     @RequestMapping(path = "/student/{uid}", method = RequestMethod.GET)
@@ -165,7 +168,7 @@ public class ApiController
     @RequestMapping(path = "/document-content/{guid}/{fileExtension}", method = RequestMethod.GET)
     public ResponseEntity<Resource> getFileContent(@PathVariable String guid, @PathVariable String fileExtension) throws IOException
     {
-        byte[] content = S3_Helper.downloadFile(guid, fileExtension);
+        byte[] content = s3Server.downloadFile(guid, fileExtension);
         ByteArrayResource resource = new ByteArrayResource(content);
         return ResponseEntity.ok()
                 .contentType(MediaType.APPLICATION_OCTET_STREAM)
@@ -180,7 +183,7 @@ public class ApiController
     @RequestMapping(path = "/document-content/{guid}/{fileExtension}", method = RequestMethod.POST)
     public String postFileContent(@PathVariable String guid, @PathVariable String fileExtension, @RequestBody byte data[]) throws IOException
     {
-        S3_Helper.uploadFile(guid, fileExtension, data);
+        s3Server.uploadFile(guid, fileExtension, data);
         return "{\"message\": \"Successfully uploaded file content to S3.\"}";
     }
 
