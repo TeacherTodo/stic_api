@@ -9,7 +9,7 @@ import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import org.springframework.beans.factory.annotation.Value;
-
+import org.springframework.stereotype.Component;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,18 +17,24 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+@Component
 public class S3_Helper
 {
     @Value("${aws.accessKey}")
-    private static String accessKey;
+    private String accessKey;
 
     @Value("${aws.secretKey}")
-    private static String secretKey;
+    private String secretKey;
 
-    private static AWSCredentials credentials;
-    private static AmazonS3 s3client;
+    private AWSCredentials credentials;
+    private AmazonS3 s3client;
 
-    public static void setup()
+    public S3_Helper()
+    {
+        setup();
+    }
+
+    public void setup()
     {
         credentials = new BasicAWSCredentials(accessKey, secretKey);
         s3client = AmazonS3ClientBuilder.standard()
@@ -37,7 +43,7 @@ public class S3_Helper
                 .build();
     }
 
-    public static boolean uploadFile(String guid, String fileExtension, byte data[]) throws IOException
+    public boolean uploadFile(String guid, String fileExtension, byte data[]) throws IOException
     {
         FileOutputStream stream = new FileOutputStream("/tmp/" + guid + "." + fileExtension);
         stream.write(data);
@@ -51,7 +57,7 @@ public class S3_Helper
         return true;
     }
 
-    public static byte[] downloadFile(String guid, String fileExtension) throws IOException
+    public byte[] downloadFile(String guid, String fileExtension) throws IOException
     {
         S3Object object = s3client.getObject("nau-stic-capstone", "Document/" + guid + "." + fileExtension);
         S3ObjectInputStream inputStream = object.getObjectContent();
