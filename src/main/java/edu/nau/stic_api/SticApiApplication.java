@@ -12,7 +12,6 @@ public class SticApiApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SticApiApplication.class, args);
-        S3_Helper.setup();
     }
 
     @Bean
