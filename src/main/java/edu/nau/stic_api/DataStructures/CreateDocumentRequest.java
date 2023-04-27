@@ -2,10 +2,21 @@ package edu.nau.stic_api.DataStructures;
 
 public class CreateDocumentRequest
 {
-    public String file_extension;
-    public int requirement_instance_id;
-    public String student_uid;
+    public String fileExtension;
+    public int requirementInstanceId;
+    public String studentGuid;
+    public String fileGuid;
+    public String studentName;
 
-    public String file_guid;
-    public String student_name;
+    @Override
+    public String toString() {
+        return "CreateDocumentRequest{" +
+                "fileExtension='" + fileExtension + '\'' +
+                ", requirementInstanceId=" + requirementInstanceId +
+                ", studentGuid='" + studentGuid + '\'' +
+                ", fileGuid='" + fileGuid + '\'' +
+                ", studentName='" + studentName + '\'' +
+                '}';
+    }
 }
+

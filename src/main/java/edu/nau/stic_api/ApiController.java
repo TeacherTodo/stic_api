@@ -144,7 +144,7 @@ public class ApiController
         {
             return  "{\"error\": \"Unable to find document instance with GUID of " + guid + ".\"}";
         }
-        else if(!doc.getStudentUID().equals(uid))
+        else if(!doc.getStudentGuid().equals(uid))
         {
             return  "{\"error\": \"UID listed on document does not match " + uid + ".\"}";
         }
@@ -321,7 +321,7 @@ public class ApiController
     @RequestMapping(path = "/docs-pending", method = RequestMethod.GET)
     public String pendingDocs() throws JsonProcessingException
     {
-        List<Document> docs = doc_repo.findByStatus("Pending Approval");
+        List<Document> docs = doc_repo.findByApprovalStatus("Pending Approval");
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(docs.toArray());
     }
@@ -347,12 +347,26 @@ public class ApiController
     @RequestMapping(path = "/documents", method = RequestMethod.POST, consumes = "application/json")
     public String createDocument(@RequestBody String jsonString) throws JsonProcessingException
     {
+        System.out.println("createDocument(@RequestBody String jsonString):");
+
         ObjectMapper mapper = new ObjectMapper();
         CreateDocumentRequest req = mapper.readValue(jsonString, CreateDocumentRequest.class);
-//        String guid = UUID.randomUUID().toString();
-        doc_repo.save(new Document(req.file_guid, req.file_extension, "Pending Approval", req.requirement_instance_id,
-                req.student_uid, req.student_name, new Date()));
-        return "{\"message\": \"Created new document with GUID " + req.file_guid + ".\"}";
+
+        System.out.println("createDocument(@RequestBody String jsonString): " + req);
+
+//        String guid = UUID.randomUUID().toString(); //TODO: is it a good idea for the client to generate the GUID?
+
+        doc_repo.save(new Document(req.fileGuid, req.fileExtension, "Pending Approval", req.requirementInstanceId,
+                req.studentGuid, req.studentName, new Date()));
+
+        // TODO: add the document to the requirement instance
+        RequirementInstance requirement = instance_repo.findById(req.requirementInstanceId);
+        requirement.setDocGUID(req.fileGuid);
+        instance_repo.save(requirement);
+
+        System.out.println("createDocument(@RequestBody String jsonString) requirementInstance: " + requirement);
+
+        return "{\"message\": \"Created new document with GUID " + req.fileGuid + ".\"}";
     }
 
     @RequestMapping(path = "/requirements", method = RequestMethod.POST, consumes = "application/json")
@@ -428,7 +442,7 @@ public class ApiController
         ObjectMapper mapper = new ObjectMapper();
         Document doc = mapper.readValue(jsonString, Document.class);
         doc_repo.save(doc);
-        return "{\"message\": \"Updated document with GUID " + doc.getGUID() + ".\"}";
+        return "{\"message\": \"Updated document with GUID " + doc.getGuid() + ".\"}";
     }
 
     @RequestMapping(path = "/student", method = RequestMethod.POST)

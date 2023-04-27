@@ -1,6 +1,7 @@
 package edu.nau.stic_api.DataStructures;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import java.util.Date;
@@ -9,68 +10,103 @@ import java.util.Date;
 public class Document
 {
     @Id
+    @Column(name = "guid")
     private String guid;
-    private String file_extension;
-    @JsonProperty("approval_status")
-    private String status;
-    private int requirement_instance_id;
-    @JsonProperty("student_uid")
-    private String student;
-
-    private String student_name;
-    private Date upload_timestamp;
+    @Column(name = "file_extension")
+    private String fileExtension;
+    @Column(name = "approval_status")
+    private String approvalStatus;
+    @Column(name = "requirement_instance_id")
+    private int requirementInstanceId;
+    @Column(name = "student_guid")
+    private String studentGuid;
+    @Column(name = "student_name")
+    private String studentName;
+    @Column(name = "upload_timestamp")
+    @JsonIgnore
+    private Date uploadTimestamp;
 
     protected Document() {}
 
-    public Document(String guid, String file_extension, String status, int requirement_instance_id, String student, String student_name, Date upload_timestamp)
+    public Document(String guid, String fileExtension, String approvalStatus, int requirementInstanceId, String studentGuid, String studentName, Date uploadTimestamp)
     {
         this.guid = guid;
-        this.file_extension = file_extension;
-        this.status = status;
-        this.requirement_instance_id = requirement_instance_id;
-        this.student = student;
-        this.student_name = student_name;
-        this.upload_timestamp = upload_timestamp;
+        this.fileExtension = fileExtension;
+        this.approvalStatus = approvalStatus;
+        this.requirementInstanceId = requirementInstanceId;
+        this.studentGuid = studentGuid;
+        this.studentName = studentName;
+        this.uploadTimestamp = uploadTimestamp;
     }
 
-    public String getGUID()
-    {
-        return this.guid;
+    public String getGuid() {
+        return guid;
     }
 
-    public String getFileExtension()
-    {
-        return this.file_extension;
+    public void setGuid(String guid) {
+        this.guid = guid;
     }
 
-    public String getApprovalStatus()
-    {
-        return this.status;
+    public String getFileExtension() {
+        return fileExtension;
     }
 
-    public int getRequirementInstanceID()
-    {
-        return this.requirement_instance_id;
-    }
-    public String getStudentUID()
-    {
-        return this.student;
+    public void setFileExtension(String file_extension) {
+        this.fileExtension = file_extension;
     }
 
-    public String getStudentName() {return this.student_name;}
-
-    public Date getUploadTimestamp()
-    {
-        return this.upload_timestamp;
+    public String getApprovalStatus() {
+        return approvalStatus;
     }
 
-    public void setFileExtension(String file_extension)
-    {
-        this.file_extension = file_extension;
+    public void setApprovalStatus(String approval_status) {
+        this.approvalStatus = approval_status;
     }
 
-    public void setApprovalStatus(String status)
-    {
-        this.status = status;
+    public int getRequirementInstanceId() {
+        return requirementInstanceId;
+    }
+
+    public void setRequirementInstanceId(int requirement_instance_id) {
+        this.requirementInstanceId = requirement_instance_id;
+    }
+
+    public String getStudentGuid() {
+        return studentGuid;
+    }
+
+    public void setStudentGuid(String student_guid) {
+        this.studentGuid = student_guid;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String student_name) {
+        this.studentName = student_name;
+    }
+
+    @JsonIgnore
+    public Date getUploadTimestamp() {
+        return uploadTimestamp;
+    }
+
+    @JsonIgnore
+    public void setUploadTimestamp(Date upload_timestamp) {
+        this.uploadTimestamp = upload_timestamp;
+    }
+
+    @Override
+    public String toString() {
+        return "Document{" +
+                "guid='" + guid + '\'' +
+                ", fileExtension='" + fileExtension + '\'' +
+                ", approvalStatus='" + approvalStatus + '\'' +
+                ", requirementInstanceId=" + requirementInstanceId +
+                ", studentGuid='" + studentGuid + '\'' +
+                ", studentName='" + studentName + '\'' +
+                ", uploadTimestamp=" + uploadTimestamp +
+                '}';
     }
 }

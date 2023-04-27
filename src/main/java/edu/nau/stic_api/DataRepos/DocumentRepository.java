@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface DocumentRepository extends CrudRepository<Document, String>
 {
-    List<Document> findByStudent(String student_uid);
-    List<Document> findByStatus(String status);
+    List<Document> findByStudentGuid(String student_uid);
+    List<Document> findByApprovalStatus(String status);
     Document findByGuid(String guid);
 }
