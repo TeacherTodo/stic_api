@@ -4,25 +4,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class RequirementStatus
-{
+public class RequirementStatus {
     @Id
     private String status;
 
-    protected RequirementStatus() {}
+    protected RequirementStatus() {
+    }
 
-    public RequirementStatus(String status)
-    {
+    public RequirementStatus(String status) {
         this.status = status;
     }
 
-    public String getStatus()
-    {
+    public String getStatus() {
         return this.status;
     }
 
-    public void setStatus(String status)
-    {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

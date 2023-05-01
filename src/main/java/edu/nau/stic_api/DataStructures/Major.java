@@ -4,25 +4,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class Major
-{
+public class Major {
     @Id
     private String major;
 
-    protected Major() {}
+    protected Major() {
+    }
 
-    public Major(String major)
-    {
+    public Major(String major) {
         this.major = major;
     }
 
-    public String getMajor()
-    {
+    public String getMajor() {
         return this.major;
     }
 
-    public void setMajor(String major)
-    {
+    public void setMajor(String major) {
         this.major = major;
     }
 

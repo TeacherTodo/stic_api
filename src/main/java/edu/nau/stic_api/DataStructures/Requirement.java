@@ -6,20 +6,24 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Requirement
-{
+public class Requirement {
     @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO) //TODO: i think this is the issue
+    /*
+     * NOTE: We were having issues with persisting the requirement, and then creating requirement instances
+     * the instances would always have requirement id=0 because on save, we do not find out what the
+     * auto generated id is. So we are going to use a custom id for now.
+     */
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String major;
     private String title;
     private String description;
     private boolean documentation_required;
 
-    protected Requirement() {}
+    protected Requirement() {
+    }
 
-    public Requirement(int id, String major, String title, String description, boolean documentation_required)
-    {
+    public Requirement(int id, String major, String title, String description, boolean documentation_required) {
         this.id = id;
         this.major = major; // TODO a requirement doesnt need to be mapped to a major, we should use a join table
         this.title = title;
@@ -27,50 +31,46 @@ public class Requirement
         this.documentation_required = documentation_required;
     }
 
-    public Requirement(String major, String title, String description, boolean documentation_required)
-    {
+    public Requirement(String major, String title, String description, boolean documentation_required) {
         this.major = major;
         this.title = title;
         this.description = description;
         this.documentation_required = documentation_required;
     }
 
-    public int getID()
-    {
+    public int getID() {
         return this.id;
     }
 
-    public String getMajor()
-    {
+    public String getMajor() {
         return this.major;
     }
 
-    public String getTitle() {return  this.title;}
-
-    public String getDescription()
-    {
-        return this.description;
-    }
-
-    public boolean isDocumentationRequired()
-    {
-        return this.documentation_required;
-    }
-
-    public void setMajor(String Major)
-    {
+    public void setMajor(String Major) {
         this.major = major;
     }
 
-    public void setTitle(String title) {this.title = title;}
+    public String getTitle() {
+        return this.title;
+    }
 
-    public void setDescription(String description)
-    {
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+
+    public void setDescription(String description) {
         this.description = description;
     }
 
-    public void setDocumentationRequired(boolean documentation_required)
-    {
+    public boolean isDocumentationRequired() {
+        return this.documentation_required;
+    }
+
+    public void setDocumentationRequired(boolean documentation_required) {
         this.documentation_required = documentation_required;
     }
 

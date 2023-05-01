@@ -2,14 +2,17 @@ package edu.nau.stic_api.DataStructures;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.util.Date;
 
 @Entity
-public class RequirementInstance
-{
+public class RequirementInstance {
     @Id
-//    @GeneratedValue(strategy = GenerationType.AUTO) //TODO: i think this is the issue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private int requirement_id;
     //@JsonProperty("student_uid")
@@ -17,147 +20,119 @@ public class RequirementInstance
     private String status;
     @Nullable
     //@JsonProperty("doc_guid")
-    private String doc_guid;
+    private String docGuid;
     @Nullable
     //@JsonProperty("retake_date")
     private Date retake_date;
 
-    protected RequirementInstance() {}
+    protected RequirementInstance() {
+    }
 
-    public RequirementInstance(int id, int requirement_id, String student, String status)
-    {
+    public RequirementInstance(int requirement_id, String student, String status) {
+        this.requirement_id = requirement_id;
+        this.student = student;
+        this.status = status;
+    }
+
+    public RequirementInstance(int id, int requirement_id, String student, String status, String docGuid) {
         this.id = id;
         this.requirement_id = requirement_id;
         this.student = student;
         this.status = status;
-        this.doc_guid = null;
+        this.docGuid = docGuid;
         this.retake_date = null;
     }
 
-    public RequirementInstance(int id, int requirement_id, String student, String status, String doc_guid)
-    {
+    public RequirementInstance(int id, int requirement_id, String student, String status, Date retake_date) {
         this.id = id;
         this.requirement_id = requirement_id;
         this.student = student;
         this.status = status;
-        this.doc_guid = doc_guid;
-        this.retake_date = null;
+        this.docGuid = null;
+        this.retake_date = retake_date;
     }
 
-    public RequirementInstance(int id, int requirement_id, String student, String status, Date retake_date)
-    {
+    public RequirementInstance(int id, int requirement_id, String student, String status, String docGuid, Date retake_date) {
         this.id = id;
         this.requirement_id = requirement_id;
         this.student = student;
         this.status = status;
-        this.doc_guid = null;
+        this.docGuid = docGuid;
         this.retake_date = retake_date;
     }
 
-    public RequirementInstance(int id, int requirement_id, String student, String status, String doc_guid, Date retake_date)
-    {
-        this.id = id;
+    public RequirementInstance(int requirement_id, String student, String status, String docGuid) {
         this.requirement_id = requirement_id;
         this.student = student;
         this.status = status;
-        this.doc_guid = doc_guid;
-        this.retake_date = retake_date;
-    }
-
-    public RequirementInstance(int requirement_id, String student, String status)
-    {
-        this.requirement_id = requirement_id;
-        this.student = student;
-        this.status = status;
-        this.doc_guid = null;
+        this.docGuid = docGuid;
         this.retake_date = null;
     }
 
-    public RequirementInstance(int requirement_id, String student, String status, String doc_guid)
-    {
+    public RequirementInstance(int requirement_id, String student, String status, Date retake_date) {
         this.requirement_id = requirement_id;
         this.student = student;
         this.status = status;
-        this.doc_guid = doc_guid;
-        this.retake_date = null;
-    }
-
-    public RequirementInstance(int requirement_id, String student, String status, Date retake_date)
-    {
-        this.requirement_id = requirement_id;
-        this.student = student;
-        this.status = status;
-        this.doc_guid = null;
+        this.docGuid = null;
         this.retake_date = retake_date;
     }
 
-    public RequirementInstance(int requirement_id, String student, String status, String doc_guid, Date retake_date)
-    {
+    public RequirementInstance(int requirement_id, String student, String status, String docGuid, Date retake_date) {
         this.requirement_id = requirement_id;
         this.student = student;
         this.status = status;
-        this.doc_guid = doc_guid;
+        this.docGuid = docGuid;
         this.retake_date = retake_date;
     }
 
-    public int getID()
-    {
+    public int getID() {
         return this.id;
     }
 
     @JsonProperty("requirement_id")
-    public int getRequirementID()
-    {
+    public int getRequirementID() {
         return this.requirement_id;
     }
 
     @JsonProperty("student_uid")
-    public String getStudentUID()
-    {
+    public String getStudentUID() {
         return this.student;
     }
 
-    public String getStatus()
-    {
+    public String getStatus() {
         return this.status;
     }
 
-    @JsonProperty("doc_guid")
-    public String getDocGUID()
-    {
-        return this.doc_guid;
-    }
-
-    @JsonProperty("retake_date")
-    public Date getRetakeDate()
-    {
-        return this.retake_date;
-    }
-
-    public void setStatus(String status)
-    {
+    public void setStatus(String status) {
         this.status = status;
     }
 
-    public void setDocGUID(String doc_guid)
-    {
-        this.doc_guid = doc_guid;
+    @JsonProperty("doc_guid")
+    public String getDocGUID() {
+        return this.docGuid;
     }
 
-    public void setRetakeDate(Date retake_date)
-    {
+    public void setDocGUID(String doc_guid) {
+        this.docGuid = doc_guid;
+    }
+
+    @JsonProperty("retake_date")
+    public Date getRetakeDate() {
+        return this.retake_date;
+    }
+
+    public void setRetakeDate(Date retake_date) {
         this.retake_date = retake_date;
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "RequirementInstance{" +
                 "id=" + id +
                 ", requirement_id=" + requirement_id +
                 ", student='" + student + '\'' +
                 ", status='" + status + '\'' +
-                ", doc_guid='" + doc_guid + '\'' +
+                ", doc_guid='" + docGuid + '\'' +
                 ", retake_date=" + retake_date +
                 '}';
     }

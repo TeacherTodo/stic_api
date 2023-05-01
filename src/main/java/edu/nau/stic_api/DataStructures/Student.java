@@ -1,6 +1,5 @@
 package edu.nau.stic_api.DataStructures;
 
-import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.hash.Hashing;
 import jakarta.persistence.Entity;
@@ -45,8 +44,8 @@ public class Student {
     @JsonProperty("uid")
     public void setUid(String email) {
         String hashedUid = Hashing.sha256()
-                                  .hashString(email, StandardCharsets.UTF_8)
-                                  .toString();
+                .hashString(email, StandardCharsets.UTF_8)
+                .toString();
 
         this.uid = hashedUid;
     }

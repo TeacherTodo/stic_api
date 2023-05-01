@@ -1,5 +1,6 @@
 package edu.nau.stic_api;
 
+import com.google.common.hash.Hashing;
 import edu.nau.stic_api.DataRepos.MajorRepository;
 import edu.nau.stic_api.DataRepos.RequirementInstanceRepository;
 import edu.nau.stic_api.DataRepos.RequirementRepository;
@@ -8,8 +9,6 @@ import edu.nau.stic_api.DataStructures.Major;
 import edu.nau.stic_api.DataStructures.Requirement;
 import edu.nau.stic_api.DataStructures.RequirementInstance;
 import edu.nau.stic_api.DataStructures.Student;
-
-import com.google.common.hash.Hashing;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;

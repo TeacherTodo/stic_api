@@ -4,8 +4,7 @@ import jakarta.annotation.Nullable;
 
 import java.util.Date;
 
-public class CreateRequirementInstanceRequest
-{
+public class CreateRequirementInstanceRequest {
     public int requirement_id;
     public String student_uid;
     public String status;

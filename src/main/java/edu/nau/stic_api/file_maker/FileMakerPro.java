@@ -11,16 +11,6 @@ import java.util.List;
 
 public class FileMakerPro {
 
-    public static class InvalidFormatException extends Exception {
-        public InvalidFormatException() {
-            super();
-        }
-
-        public InvalidFormatException(String message) {
-            super(message);
-        }
-    }
-
     public static List<Student> getStudents(Sheet sheet) throws InvalidFormatException {
         List<Student> students = new ArrayList<>();
 
@@ -36,7 +26,9 @@ public class FileMakerPro {
 //            count++;
 //            System.out.println("Count: " + count);
 //            Student student = getStudent(sheet, studentRows.next());
+//            System.out.println("Student: " + student);
 //        }
+//        studentRows = getStudentRows(sheet);
         // TODO: end of testing
 
         try {
@@ -97,9 +89,9 @@ public class FileMakerPro {
 
     private static Student getStudent(Sheet sheet, Row row) throws InvalidFormatException {
         // TODO: start of testing
-//        System.out.println("--- getStudent()");
-//        row.cellIterator().forEachRemaining(System.out::println);
-//        System.out.println("--- END getStudent()\n");
+        System.out.println("--- getStudent()");
+        row.cellIterator().forEachRemaining(System.out::println);
+        System.out.println("--- END getStudent()\n");
         // TODO: end of testing
 
         Student student = new Student();
@@ -145,6 +137,16 @@ public class FileMakerPro {
         }
 
         return baseYear + parsedYear;
+    }
+
+    public static class InvalidFormatException extends Exception {
+        public InvalidFormatException() {
+            super("Invalid FileMaker Pro format.");
+        }
+
+        public InvalidFormatException(String message) {
+            super(message);
+        }
     }
 
 

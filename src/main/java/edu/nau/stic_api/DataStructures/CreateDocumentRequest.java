@@ -1,7 +1,6 @@
 package edu.nau.stic_api.DataStructures;
 
-public class CreateDocumentRequest
-{
+public class CreateDocumentRequest {
     public String fileExtension;
     public int requirementInstanceId;
     public String studentGuid;

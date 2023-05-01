@@ -4,11 +4,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+
 import java.util.Date;
 
 @Entity
-public class Document
-{
+public class Document {
     @Id
     @Column(name = "guid")
     private String guid;
@@ -26,10 +26,10 @@ public class Document
     @JsonIgnore
     private Date uploadTimestamp;
 
-    protected Document() {}
+    protected Document() {
+    }
 
-    public Document(String guid, String fileExtension, String approvalStatus, int requirementInstanceId, String studentGuid, String studentName, Date uploadTimestamp)
-    {
+    public Document(String guid, String fileExtension, String approvalStatus, int requirementInstanceId, String studentGuid, String studentName, Date uploadTimestamp) {
         this.guid = guid;
         this.fileExtension = fileExtension;
         this.approvalStatus = approvalStatus;

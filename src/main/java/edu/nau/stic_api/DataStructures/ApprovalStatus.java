@@ -4,25 +4,22 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 
 @Entity
-public class ApprovalStatus
-{
+public class ApprovalStatus {
     @Id
     private String status;
 
-    protected ApprovalStatus() {}
+    protected ApprovalStatus() {
+    }
 
-    public ApprovalStatus(String status)
-    {
+    public ApprovalStatus(String status) {
         this.status = status;
     }
 
-    public String getStatus()
-    {
+    public String getStatus() {
         return this.status;
     }
 
-    public void setStatus(String status)
-    {
+    public void setStatus(String status) {
         this.status = status;
     }
 }

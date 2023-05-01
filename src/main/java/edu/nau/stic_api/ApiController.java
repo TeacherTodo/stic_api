@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.Lists;
+import com.google.common.hash.Hashing;
 import edu.nau.stic_api.DataRepos.*;
 import edu.nau.stic_api.DataStructures.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +20,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping(path = "/api", produces = "application/json")
-public class ApiController
-{
+public class ApiController {
     @Autowired
     private StudentRepository student_repo;
 
@@ -56,12 +57,10 @@ public class ApiController
     /* Database Access Methods: GET */
 
     @RequestMapping(path = "/student/{uid}", method = RequestMethod.GET)
-    public String getStudent(@PathVariable String uid) throws JsonProcessingException
-    {
+    public String getStudent(@PathVariable String uid) throws JsonProcessingException {
         Student student = student_repo.findByUid(uid);
 
-        if(student != null)
-        {
+        if (student != null) {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(student);
         }
@@ -70,12 +69,10 @@ public class ApiController
     }
 
     @RequestMapping(path = "/student/requirements/{uid}")
-    public String getStudentRequirements(@PathVariable String uid) throws JsonProcessingException
-    {
+    public String getStudentRequirements(@PathVariable String uid) throws JsonProcessingException {
         List<RequirementInstance> requirements = instance_repo.findByStudent(uid);
 
-        if(requirements != null)
-        {
+        if (requirements != null) {
             ObjectMapper mapper = new ObjectMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
             return mapper.writeValueAsString(requirements.toArray());
@@ -85,8 +82,7 @@ public class ApiController
     }
 
     @RequestMapping(path = "/students", method = RequestMethod.GET)
-    public String getAllStudents() throws JsonProcessingException
-    {
+    public String getAllStudents() throws JsonProcessingException {
         Iterable<Student> studentIterator = student_repo.findAll();
         List<Student> students = Lists.newArrayList(studentIterator);
         ObjectMapper mapper = new ObjectMapper();
@@ -102,15 +98,13 @@ public class ApiController
     }
 
     @RequestMapping(path = "/admins", method = RequestMethod.GET)
-    public String getAllAdmins() throws JsonProcessingException
-    {
+    public String getAllAdmins() throws JsonProcessingException {
         Iterable<AdminUser> adminUserIterable = admin_repo.findAll();
         List<AdminUser> admins = new ArrayList<AdminUser>();
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
 
-        for(AdminUser admin : adminUserIterable)
-        {
+        for (AdminUser admin : adminUserIterable) {
             admins.add(admin);
         }
 
@@ -118,16 +112,12 @@ public class ApiController
     }
 
     @RequestMapping(path = "/requirement-instance/{id}/{uid}", method = RequestMethod.GET)
-    public String getRequirementInstance(@PathVariable int id, @PathVariable String uid) throws JsonProcessingException
-    {
+    public String getRequirementInstance(@PathVariable int id, @PathVariable String uid) throws JsonProcessingException {
         RequirementInstance instance = instance_repo.findById(id);
 
-        if(instance == null)
-        {
+        if (instance == null) {
             return "{\"error\": \"Unable to find requirement instance with ID of " + id + ".\"}";
-        }
-        else if(!instance.getStudentUID().equals(uid))
-        {
+        } else if (!instance.getStudentUID().equals(uid)) {
             return "{\"error\": \"UID listed on requirement does not match " + uid + ".\"}";
         }
 
@@ -136,17 +126,13 @@ public class ApiController
     }
 
     @RequestMapping(path = "/document/{guid}/{uid}", method = RequestMethod.GET)
-    public String getDocument(@PathVariable String guid, @PathVariable String uid) throws Exception
-    {
+    public String getDocument(@PathVariable String guid, @PathVariable String uid) throws Exception {
         Document doc = doc_repo.findByGuid(guid);
 
-        if(doc == null)
-        {
-            return  "{\"error\": \"Unable to find document instance with GUID of " + guid + ".\"}";
-        }
-        else if(!doc.getStudentGuid().equals(uid))
-        {
-            return  "{\"error\": \"UID listed on document does not match " + uid + ".\"}";
+        if (doc == null) {
+            return "{\"error\": \"Unable to find document instance with GUID of " + guid + ".\"}";
+        } else if (!doc.getStudentGuid().equals(uid)) {
+            return "{\"error\": \"UID listed on document does not match " + uid + ".\"}";
         }
 
         /*
@@ -166,8 +152,7 @@ public class ApiController
     }
 
     @RequestMapping(path = "/document-content/{guid}/{fileExtension}", method = RequestMethod.GET)
-    public ResponseEntity<Resource> getFileContent(@PathVariable String guid, @PathVariable String fileExtension) throws IOException
-    {
+    public ResponseEntity<Resource> getFileContent(@PathVariable String guid, @PathVariable String fileExtension) throws IOException {
         byte[] content = helper.downloadFile(guid, fileExtension);
         ByteArrayResource resource = new ByteArrayResource(content);
         return ResponseEntity.ok()
@@ -181,21 +166,18 @@ public class ApiController
     }
 
     @RequestMapping(path = "/document-content/{guid}/{fileExtension}", method = RequestMethod.POST)
-    public String postFileContent(@PathVariable String guid, @PathVariable String fileExtension, @RequestBody byte data[]) throws IOException
-    {
+    public String postFileContent(@PathVariable String guid, @PathVariable String fileExtension, @RequestBody byte data[]) throws IOException {
         helper.uploadFile(guid, fileExtension, data);
         return "{\"message\": \"Successfully uploaded file content to S3.\"}";
     }
 
     @RequestMapping(path = "/majors", method = RequestMethod.GET)
-    public String getAllMajors() throws JsonProcessingException
-    {
+    public String getAllMajors() throws JsonProcessingException {
         Iterable<Major> majorIterable = major_repo.findAll();
         List<Major> majors = new ArrayList<Major>();
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        for(Major major : majorIterable)
-        {
+        for (Major major : majorIterable) {
             majors.add(major);
         }
 
@@ -203,14 +185,12 @@ public class ApiController
     }
 
     @RequestMapping(path = "/terms", method = RequestMethod.GET)
-    public String getAllTerms() throws JsonProcessingException
-    {
+    public String getAllTerms() throws JsonProcessingException {
         Iterable<Term> termIterable = term_repo.findAll();
         List<Term> terms = new ArrayList<Term>();
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        for(Term term : termIterable)
-        {
+        for (Term term : termIterable) {
             terms.add(term);
         }
 
@@ -218,14 +198,12 @@ public class ApiController
     }
 
     @RequestMapping(path = "/requirement-status", method = RequestMethod.GET)
-    public String getAllRequirementStatuses() throws JsonProcessingException
-    {
+    public String getAllRequirementStatuses() throws JsonProcessingException {
         Iterable<RequirementStatus> statusIterable = request_status_repo.findAll();
         List<RequirementStatus> statuses = new ArrayList<RequirementStatus>();
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        for(RequirementStatus status : statusIterable)
-        {
+        for (RequirementStatus status : statusIterable) {
             statuses.add(status);
         }
 
@@ -233,14 +211,12 @@ public class ApiController
     }
 
     @RequestMapping(path = "/approval-status", method = RequestMethod.GET)
-    public String getAllApprovalStatuses() throws JsonProcessingException
-    {
+    public String getAllApprovalStatuses() throws JsonProcessingException {
         Iterable<ApprovalStatus> statusIterable = approval_status_repo.findAll();
         List<ApprovalStatus> statuses = new ArrayList<ApprovalStatus>();
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        for(ApprovalStatus status : statusIterable)
-        {
+        for (ApprovalStatus status : statusIterable) {
             statuses.add(status);
         }
 
@@ -248,14 +224,12 @@ public class ApiController
     }
 
     @RequestMapping(path = "/requirements", method = RequestMethod.GET)
-    public String getAllRequirements() throws JsonProcessingException
-    {
+    public String getAllRequirements() throws JsonProcessingException {
         Iterable<Requirement> requirementIterable = requirement_repo.findAll();
         List<Requirement> requirements = new ArrayList<Requirement>();
         ObjectMapper mapper = new ObjectMapper();
         mapper.enable(SerializationFeature.INDENT_OUTPUT);
-        for(Requirement req : requirementIterable)
-        {
+        for (Requirement req : requirementIterable) {
             requirements.add(req);
         }
 
@@ -263,12 +237,10 @@ public class ApiController
     }
 
     @RequestMapping(path = "/requirement/{id}", method = RequestMethod.GET)
-    public String getRequirement(@PathVariable int id) throws JsonProcessingException
-    {
+    public String getRequirement(@PathVariable int id) throws JsonProcessingException {
         Requirement req = requirement_repo.findById(id);
 
-        if(req != null)
-        {
+        if (req != null) {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(req);
         }
@@ -277,12 +249,10 @@ public class ApiController
     }
 
     @RequestMapping(path = "/major/{name}", method = RequestMethod.GET)
-    public String getMajor(@PathVariable String name) throws JsonProcessingException
-    {
+    public String getMajor(@PathVariable String name) throws JsonProcessingException {
         Major major = major_repo.findByMajor(name);
 
-        if(major != null)
-        {
+        if (major != null) {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(major);
         }
@@ -291,12 +261,10 @@ public class ApiController
     }
 
     @RequestMapping(path = "/term/{name}", method = RequestMethod.GET)
-    public String getTerm(@PathVariable String name) throws JsonProcessingException
-    {
+    public String getTerm(@PathVariable String name) throws JsonProcessingException {
         Term term = term_repo.findByTerm(name);
 
-        if(term != null)
-        {
+        if (term != null) {
             ObjectMapper mapper = new ObjectMapper();
             return mapper.writeValueAsString(term);
         }
@@ -305,13 +273,11 @@ public class ApiController
     }
 
     @RequestMapping(path = "/docs-all", method = RequestMethod.GET)
-    public String allDocs() throws JsonProcessingException
-    {
+    public String allDocs() throws JsonProcessingException {
         Iterable<Document> documentIterable = doc_repo.findAll();
         List<Document> docs = new ArrayList<Document>();
         ObjectMapper mapper = new ObjectMapper();
-        for(Document doc : documentIterable)
-        {
+        for (Document doc : documentIterable) {
             docs.add(doc);
         }
 
@@ -319,8 +285,7 @@ public class ApiController
     }
 
     @RequestMapping(path = "/docs-pending", method = RequestMethod.GET)
-    public String pendingDocs() throws JsonProcessingException
-    {
+    public String pendingDocs() throws JsonProcessingException {
         List<Document> docs = doc_repo.findByApprovalStatus("Pending Approval");
         ObjectMapper mapper = new ObjectMapper();
         return mapper.writeValueAsString(docs.toArray());
@@ -329,15 +294,13 @@ public class ApiController
     /* Database Manipulation Methods: POST */
 
     @RequestMapping(path = "/admins/{uid}/{name}", method = RequestMethod.POST)
-    public String createAdminUser(@PathVariable String uid, @PathVariable String name) throws JsonProcessingException
-    {
+    public String createAdminUser(@PathVariable String uid, @PathVariable String name) throws JsonProcessingException {
         admin_repo.save(new AdminUser(uid, name));
         return "{\"message\": \"Created new administrator user with UID " + uid + ".\"}";
     }
 
     @RequestMapping(path = "/students", method = RequestMethod.POST, consumes = "application/json")
-    public String createStudent(@RequestBody String jsonString) throws JsonProcessingException
-    {
+    public String createStudent(@RequestBody String jsonString) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         CreateStudentRequest req = mapper.readValue(jsonString, CreateStudentRequest.class);
         student_repo.save(new Student(req.uid, req.major, req.grad_term, req.grad_year));
@@ -345,8 +308,7 @@ public class ApiController
     }
 
     @RequestMapping(path = "/documents", method = RequestMethod.POST, consumes = "application/json")
-    public String createDocument(@RequestBody String jsonString) throws JsonProcessingException
-    {
+    public String createDocument(@RequestBody String jsonString) throws JsonProcessingException {
         System.out.println("createDocument(@RequestBody String jsonString):");
 
         ObjectMapper mapper = new ObjectMapper();
@@ -370,40 +332,52 @@ public class ApiController
     }
 
     @RequestMapping(path = "/requirements", method = RequestMethod.POST, consumes = "application/json")
-    public String createRequirement(@RequestBody String jsonString) throws JsonProcessingException
-    {
+    public String createRequirement(@RequestBody String jsonString) throws JsonProcessingException {
+        /*
+         * TODO: we should make a check to make sure that the major actually exists for this requirement.
+         */
+
         ObjectMapper mapper = new ObjectMapper();
         CreateRequirementRequest req = mapper.readValue(jsonString, CreateRequirementRequest.class);
-        Requirement newReq = new Requirement(req.major, req.title, req.description, req.documentation_required);
+        /*
+         * Create a new requirement and save it to the database. We did this because the auto generate UUID was
+         * causing issues with the database. on save, the ID was being set to 0, which was causing issues with
+         * the creation of the requirement instance.
+         */
+        Requirement newReq = new Requirement(UUID.randomUUID().hashCode(), req.major, req.title, req.description, req.documentation_required);
         requirement_repo.save(newReq);
+
+        /*
+         * Get all students with this major and create a requirement instance for each of them.
+         */
+        Iterable<Student> students = student_repo.findByMajor(req.major);
+        for (Student student : students) {
+            instance_repo.save(new RequirementInstance(newReq.getID(), student.getUid(), "Incomplete"));
+        }
+
         return "{\"message\": \"Created new requirement with ID " + newReq.getID() + ".\"}";
     }
 
     @RequestMapping(path = "/requirement-instance", method = RequestMethod.POST, consumes = "application/json")
-    public String createRequirementInstance(@RequestBody String jsonString) throws JsonProcessingException
-    {
+    public String createRequirementInstance(@RequestBody String jsonString) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         CreateRequirementInstanceRequest req = mapper.readValue(jsonString, CreateRequirementInstanceRequest.class);
         RequirementInstance instance;
 
         //Both doc_guid and retake_date null
-        if(req.doc_guid == null && req.retake_date == null)
-        {
+        if (req.doc_guid == null && req.retake_date == null) {
             instance = new RequirementInstance(req.requirement_id, req.student_uid, req.status);
         }
         //doc_guid provided, retake_date null
-        else if(req.retake_date == null)
-        {
+        else if (req.retake_date == null) {
             instance = new RequirementInstance(req.requirement_id, req.student_uid, req.status, req.doc_guid);
         }
         //doc_guid null, retake_date provided
-        else if(req.doc_guid == null)
-        {
+        else if (req.doc_guid == null) {
             instance = new RequirementInstance(req.requirement_id, req.student_uid, req.status, req.retake_date);
         }
         //Both doc_guid and retake_date are set
-        else
-        {
+        else {
             instance = new RequirementInstance(req.requirement_id, req.student_uid, req.status, req.doc_guid, req.retake_date);
         }
 
@@ -412,15 +386,13 @@ public class ApiController
     }
 
     @RequestMapping(path = "/majors/{name}", method = RequestMethod.POST)
-    public String createMajor(@PathVariable String name) throws JsonProcessingException
-    {
+    public String createMajor(@PathVariable String name) throws JsonProcessingException {
         major_repo.save(new Major(name));
         return "{\"message\": \"Created new major " + name + ".\"}";
     }
 
     @RequestMapping(path = "/requirement", method = RequestMethod.POST)
-    public String editRequirement(@RequestBody String jsonString) throws JsonProcessingException
-    {
+    public String editRequirement(@RequestBody String jsonString) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Requirement req = mapper.readValue(jsonString, Requirement.class);
         requirement_repo.save(req);
@@ -428,8 +400,7 @@ public class ApiController
     }
 
     @RequestMapping(path = "/requirement-instance", method = RequestMethod.POST)
-    public String editRequirementInstance(@RequestBody String jsonString) throws JsonProcessingException
-    {
+    public String editRequirementInstance(@RequestBody String jsonString) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         RequirementInstance instance = mapper.readValue(jsonString, RequirementInstance.class);
         instance_repo.save(instance);
@@ -437,8 +408,7 @@ public class ApiController
     }
 
     @RequestMapping(path = "/document", method = RequestMethod.POST)
-    public String editDocument(@RequestBody String jsonString) throws JsonProcessingException
-    {
+    public String editDocument(@RequestBody String jsonString) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Document doc = mapper.readValue(jsonString, Document.class);
         doc_repo.save(doc);
@@ -446,8 +416,7 @@ public class ApiController
     }
 
     @RequestMapping(path = "/student", method = RequestMethod.POST)
-    public String editStudent(@RequestBody String jsonString) throws JsonProcessingException
-    {
+    public String editStudent(@RequestBody String jsonString) throws JsonProcessingException {
         ObjectMapper mapper = new ObjectMapper();
         Student student = mapper.readValue(jsonString, Student.class);
         student_repo.save(student);
@@ -455,43 +424,41 @@ public class ApiController
     }
 
     @RequestMapping(path = "/requirement/{id}", method = RequestMethod.DELETE)
-    public String deleteRequirement(@PathVariable int id)
-    {
+    public String deleteRequirement(@PathVariable int id) {
         requirement_repo.deleteById(id);
         return "{\"message\": \"Deleted requirement with ID " + id + ".\"}";
     }
 
     @RequestMapping(path = "/requirement-instance/{id}", method = RequestMethod.DELETE)
-    public String deleteRequirementInstance(@PathVariable int id)
-    {
+    public String deleteRequirementInstance(@PathVariable int id) {
         instance_repo.deleteById(id);
         return "{\"message\": \"Deleted requirement instance with ID " + id + ".\"}";
     }
 
     @RequestMapping(path = "/document/{guid}", method = RequestMethod.DELETE)
-    public String deleteDocument(@PathVariable String guid)
-    {
+    public String deleteDocument(@PathVariable String guid) {
         doc_repo.deleteById(guid);
+        RequirementInstance reqInstance = instance_repo.findByDocGuid(guid);
+        reqInstance.setDocGUID(null);
+        instance_repo.save(reqInstance);
+
         return "{\"message\": \"Deleted document with GUID " + guid + ".\"}";
     }
 
     @RequestMapping(path = "/major/{name}", method = RequestMethod.DELETE)
-    public String deleteMajor(@PathVariable String name)
-    {
+    public String deleteMajor(@PathVariable String name) {
         major_repo.deleteById(name);
         return "{\"message\": \"Deleted major with name " + name + ".\"}";
     }
 
     @RequestMapping(path = "/admin/{uid}", method = RequestMethod.DELETE)
-    public String deleteAdmin(@PathVariable String uid)
-    {
+    public String deleteAdmin(@PathVariable String uid) {
         admin_repo.deleteById(uid);
         return "{\"message\": \"Deleted admin with UID " + uid + ".\"}";
     }
 
     @RequestMapping(path = "/admin/approve-document/{guid}", method = RequestMethod.GET)
-    public String approveDocument(@PathVariable String guid)
-    {
+    public String approveDocument(@PathVariable String guid) {
         Document doc = doc_repo.findByGuid(guid);
         doc.setApprovalStatus("Approved");
         doc_repo.save(doc);
@@ -499,11 +466,23 @@ public class ApiController
     }
 
     @RequestMapping(path = "/admin/deny-document/{guid}", method = RequestMethod.GET)
-    public String denyDocument(@PathVariable String guid)
-    {
+    public String denyDocument(@PathVariable String guid) {
         Document doc = doc_repo.findByGuid(guid);
         doc.setApprovalStatus("Denied");
         doc_repo.save(doc);
         return "{\"message\": \"Updated document status to denied.\"}";
+    }
+
+    /*
+     * TODO: make accept a file
+     */
+    @GetMapping(path = "fileMakerPro")
+    public String fileMakerPro() {
+        List<Major> majors = FileMakerProInitilizeDatabase.createMajors();
+        List<Student> students = FileMakerProInitilizeDatabase.createStudents();
+        major_repo.saveAll(majors);
+        student_repo.saveAll(students);
+
+        return "{\"message\": \"FileMaker Pro uploaded.\"}";
     }
 }
