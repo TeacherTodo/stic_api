@@ -20,10 +20,10 @@ import java.nio.file.Paths;
 @Component
 public class S3_Helper {
     //    @Value("${aws.accessKey}")
-    private String accessKey = null;
+    private String accessKey = "AKIA2BVXDM6EKLXHZF5Y";
 
     //    @Value("${aws.secretKey}")
-    private String secretKey = null;
+    private String secretKey = "9Q7EeNBcQeMOi0VaKmcNz/TX77B7UZqtTQ7UvaL0";
 
     private AWSCredentials credentials;
     private AmazonS3 s3client;

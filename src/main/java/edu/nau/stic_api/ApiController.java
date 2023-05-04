@@ -507,4 +507,40 @@ public class ApiController {
 
         return "{\"message\": \"Updated requirement instance with ID " + requirementInstanceId + ".\"}";
     }
+
+    @RequestMapping(path = "/update-req-instance-status/{reqInstanceID}/{status}", method = RequestMethod.GET)
+    public String updateRequirementInstanceStatus(@PathVariable int reqInstanceID, @PathVariable String status)
+    {
+        RequirementInstance instanceToUpdate = instance_repo.findById(reqInstanceID);
+        List<String> validStatuses = List.of("Incomplete", "In Progress", "Complete");
+
+        if(!validStatuses.contains(status))
+        {
+            return "{\"message\": \"Invalid status provided.\"}";
+        }
+
+        if(instanceToUpdate == null)
+        {
+            return "{\"message\": \"Invalid requirement instance ID provided.\"}";
+        }
+
+        instanceToUpdate.setStatus(status);
+        instance_repo.save(instanceToUpdate);
+
+        return "{\"message\": \"Successfully updated requirement instance status.\"}";
+    }
+
+    @RequestMapping(path = "/req-id-from-doc-guid/{guid}", method = RequestMethod.GET)
+    public String getReqInstanceFromDocGuid(@PathVariable String guid) throws Exception
+    {
+        RequirementInstance instance = instance_repo.findByDocGuid(guid);
+        ObjectMapper mapper = new ObjectMapper();
+
+        if(instance == null)
+        {
+            return "{\"message\": \"Invalid document GUID provided.\"}";
+        }
+
+        return mapper.writeValueAsString(instance);
+    }
 }
