@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.common.collect.Lists;
-import com.google.common.hash.Hashing;
 import edu.nau.stic_api.DataRepos.*;
 import edu.nau.stic_api.DataStructures.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -484,5 +483,28 @@ public class ApiController {
         student_repo.saveAll(students);
 
         return "{\"message\": \"FileMaker Pro uploaded.\"}";
+    }
+
+    @PatchMapping(path = "requirementInstances/{requirementInstanceId}")
+    public String updateRequirementInstance(@PathVariable int requirementInstanceId, @RequestBody String jsonString) throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        RequirementInstance updateFields = mapper.readValue(jsonString, RequirementInstance.class);
+
+        System.out.println("updateRequirementInstance(): " + jsonString);
+        System.out.println(updateFields);
+
+        RequirementInstance instanceToUpdate = instance_repo.findById(requirementInstanceId);
+
+        String status = updateFields.getStatus();
+        List<String> validStatuses = List.of("Incomplete", "In Progress", "Complete");
+
+        if (validStatuses.contains(status)) {
+            instanceToUpdate.setStatus(updateFields.getStatus());
+            instance_repo.save(instanceToUpdate);
+        } else {
+            return "{\"message\": \"Invalid status provided.\"}";
+        }
+
+        return "{\"message\": \"Updated requirement instance with ID " + requirementInstanceId + ".\"}";
     }
 }

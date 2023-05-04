@@ -11,6 +11,14 @@ import java.util.Date;
 
 @Entity
 public class RequirementInstance {
+
+    /*
+     * Statuses:
+     *  Incomplete
+     *  In Progress
+     *  Complete
+     */
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
