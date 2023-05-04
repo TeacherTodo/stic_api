@@ -543,4 +543,20 @@ public class ApiController {
 
         return mapper.writeValueAsString(instance);
     }
+
+    @RequestMapping(path = "/deactivate-student/{uid}", method = RequestMethod.GET)
+    public String deactivateStudent(@PathVariable String uid)
+    {
+        Student student = student_repo.findByUid(uid);
+
+        if(student == null)
+        {
+            return "{\"message\": \"Invalid student UID provided.\"}";
+        }
+
+        student.setActive(false);
+        student_repo.save(student);
+
+        return "{\"message\": \"Successfully deactivated student.\"}";
+    }
 }
